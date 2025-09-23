@@ -1,6 +1,6 @@
 # Advanced Data Structures Project 
 
-This project was developed for the course **Advanced Data Structures (EDA)** in the **Computer Systems Engineering** degree at IPCA.
+This project was developed for the course **Advanced Data Structures** in the **Computer Systems Engineering** degree at IPCA.
 The goal is to apply **graph theory** and programming in C to solve an optimization problem involving integer matrices.
 
 ---
