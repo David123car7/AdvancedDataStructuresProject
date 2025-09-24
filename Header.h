@@ -1,121 +1,235 @@
 /*****************************************************************//**
- * \file   Header.h
- * \brief  Ficheiro cabeçalho do Projeto de Avaliação
+ * @file   Header.h
+ * @brief  
  * 
- * \author David Carvalho (27973)
- * \date   March 2024
+ * @author David Carvalho
+ * @date   April 2024
  *********************************************************************/
 
 #pragma once
-
 #include <stdbool.h>
+#define INFINITO 9999
 
 /// <summary>
-/// int num: Numero inteiro da matriz
-///  Matriz* direita: Apontador do tipo matriz que serve para apontar a direita
-///  Matriz* baixo: Apontador do tipo matriz que serve para apontar baixo
-///  int escolhido: Se for 1 é o numero escolhido para a soma, se for 0 é porque ainda nao se sabe se pode ser escolhido e se for -1 nao pode ser escolhido
-///	 bool estaRiscado: Variavel booleana que determina se a celula da matriz esta riscada ou nao
-///  bool estaRiscado2Vezes: Variavel booleana que determina se a celula da matriz esta riscada duasvezes ou nao
+/// Estrutura do grafo
 /// </summary>
-typedef struct Matriz{
-	int num; 
-	struct Matriz* direita;
-	struct Matriz* baixo;
-	int escolhido; 
-	bool estaRiscado;
-	bool estaRiscado2Vezes;
-}Matriz;
+typedef struct Grafo {
+	struct Vertice* vertInicio;
+	int vertices;
+}Grafo;
 
-#pragma region Celulas
-Matriz* CriarCelula(int num);
-Matriz* AdicionarCelulaInicio(Matriz* inicio, Matriz* matriz);
-Matriz* AdicionarCelulaFim(Matriz* inicio, Matriz* matriz);
-int ContarCelulasLinha(Matriz* linha);
-int ContarCelulasColuna(Matriz* coluna);
-#pragma endregion
+/// <summary>
+/// Estrutura do vertice
+/// </summary>
+typedef struct Vertice {
+	int id;
+	bool visitado;
+	struct Vertice* proxVertice;
+	struct Adjacente* proxAdjacente;
+}Vertice;
 
-#pragma region Linhas
-Matriz* CriarLinhaMatriz(int num[], int t);
-Matriz* CriarLinhaMatriz2(int valor, int t);
-Matriz* AdicionarLinhaMatriz(Matriz* inicio, Matriz* linha);
-int ContarLinhas(Matriz* matriz);
-#pragma endregion
+/// <summary>
+/// Estrutura dos vertices adjacentes
+/// </summary>
+typedef struct Adjacente {
+	int id;
+	int peso;
+	struct Adjacente* proxAdjacente;
+}Adjacente;
 
-#pragma region Colunas
-Matriz* CriarColunaMatriz(int num[], int t);
-Matriz* CriarColunaMatriz2(int valor, int t);
-Matriz* AdicionarColunaMatriz(Matriz* inicio, Matriz* coluna);
-int ContarColunas(Matriz* matriz);
-#pragma endregion
+/// <summary>
+/// Estrutura da lista de inteiros
+/// </summary>
+typedef struct ListaInteiros {
+	int num;
+	struct ListaInteiros* proxInteiro;
+}ListaInteiros;
 
-#pragma region Mostrar
-int MostrarMatrizTotal(Matriz* inicio);
-#pragma endregion
+/// <summary>
+/// Estrutura dos vertices distancia
+/// </summary>
+typedef struct VerticeDistancia {
+	int id;
+	int distancia;
+	struct VerticeDistancia* proxVerDist;
+	struct VerticeDistancia* antVerDist;
+}VerticeDistancia;
 
-#pragma region Ficheiros
-Matriz* CarregarMatriz(char fileName[]);
-int GuardaMatriz(char fileName[], Matriz* inicio);
+#pragma region Vertices
+Vertice* CriarVertice();
+
+#pragma region Adicionar/Alterar
+Vertice* AdicionarDadosVertice(Vertice* vertice, int id, bool visitado, int* res);
+Vertice* AdicionarVertice(Vertice* vertices, Vertice* vertice, int* res);
+Vertice* AdicionarAdjacenciaVertices(Vertice* vertices, int origem, Adjacente* adjacente, int verificar, int* res);
+Vertice* AlterarEstadoVerticeVisitado(Vertice* vertice, bool estado, int* res);
+Vertice* AlterarEstadoVerticeVisitadoVertices(Vertice* vertices, int id, bool estado, int* res);
+Vertice* AlterarEstadoVisitadoTodosVertices(Vertice* vertices, bool estado, int* res);
 #pragma endregion
 
 #pragma region Remover
-Matriz* RemoverLinha(Matriz* inicio, int l);
-Matriz* RemoverColuna(Matriz* inicio, int c);
-#pragma endregion
-
-#pragma region CalcularSomaMaxima
-int CalcularSomaMaxima(Matriz* inicio);
-Matriz* NegarNumerosMatriz(Matriz* inicio);
-Matriz* SomarValoresMatriz(Matriz* inicio, int valor);
-Matriz* SomarValoresMatrizRiscadoDuasVezes(Matriz* inicio, int valor);
-Matriz* FazerMatrizQuadarada(Matriz* inicio);
+Vertice* RemoverVertice(Vertice* vertices, int id, int* res);
+Vertice* RemoveAdjacenteVertices(Vertice* vertices, int vertice, int adjacente, int* res);
+Vertice* RemoverAdjacenteTodosVertices(Vertice* vertices, int id, int* res);
+Vertice* RemoverTodosAdjacentesVertice(Vertice* vertices, int id, int* res);
 #pragma endregion
 
 #pragma region Verificacoes
-Matriz* AplicarAtribuicaoIdeal(Matriz* inicio);
-int VerificarAtribuicao(Matriz* inicio);
-#pragma endregion
-
-#pragma region EncontrarMenorValor
-int EncontrarMenorValorMatriz(Matriz* inicio);
-int EncontrarMenorValorMatrizNaoRiscado(Matriz* inicio);
-int EncontrarMenorValorLinha(Matriz* inicio, int l);
-int EncontrarMenorValorColuna(Matriz* inicio, int c);
-int EncontrarPrimeiroValorMatrizNaoRiscado(Matriz* inicio);
-#pragma endregion
-
-#pragma region SubtrairValores
-Matriz* SubtrairValorLinha(Matriz* inicio, int valor, int l);
-Matriz* SubtrairValorColuna(Matriz* inicio, int valor, int c);
-Matriz* SubtrairValoresMatrizNaoRiscado(Matriz* inicio, int valor);
-#pragma endregion
-
-#pragma region ContarNumeros
-int ContarNumeroLinha(Matriz* inicio, int num, int linha);
-int ContarNumeroLinha2(Matriz* inicio, int num);
-int ContarNumeroColuna(Matriz* inicio, int num, int coluna);    
-int ContarNumeroColuna2(Matriz* inicio, int num);
-int ContarZerosEscolhidosLinha(Matriz* inicio, int linha);
-int ContarZerosEscolhidosColuna(Matriz* inicio, int coluna);
-int ContarZerosEscolhidosColuna2(Matriz* inicio);
-#pragma endregion
-
-#pragma region RiscarMatriz
-Matriz* RiscarMatriz(Matriz* inicio);
-Matriz* RiscarLinha(Matriz* inicio, int linha);
-Matriz* RiscarLinha2(Matriz* inicio);
-Matriz* RiscarColuna(Matriz* inicio, int coluna);
-Matriz* RiscarColuna2(Matriz* inicio);
-Matriz* ResetarRiscos(Matriz* inicio);
-#pragma endregion
-
-#pragma region Controlo
-int ControlarLinhas(Matriz* inicio);
+int VerificarVertice(Vertice* vertices, int id);
+int VerificarVerticeGrafo(Grafo* grafo, int id);
+int VerificarAdjacencia(Adjacente* adjacentes, int id);
+int VerificarAdjacenciaVertice(Vertice* vertices, int id);
+int VerificarAdjacenciaVerticeGrafo(Grafo* grafo, int vertice, int adjacente);
+int VerificarVerticeVisitado(Vertice* vertices, int id);
 #pragma endregion
 
 #pragma region Outro
-Matriz* AlterarValorMatriz(Matriz* inicio, int l, int c, int valor);
-Matriz* LigarMatriz(Matriz* inicio);
-Matriz* MudarPosicaoMatriz(Matriz* inicio, int l, int c);
-int PosicaoNumero(Matriz* inicioColuna, Matriz* posicaoColuna, int num);
+Vertice* EncontrarVerticeGrafo(Grafo* grafo, int id, int* res);
+Vertice* EncontrarVertice(Vertice* vertices, int id, int* res);
+int ProcessarVertice(Vertice* vertice);
+#pragma endregion
+#pragma endregion
+
+#pragma region VerticesAdjacentes
+
+Adjacente* CriarAdjacente();
+
+#pragma region Adicionar
+Adjacente* AdicionarDadosAdjacente(Adjacente* adjacente, int id, int peso, int* res);
+Adjacente* AdicionarAdjacencia(Adjacente* adjacentes, Adjacente* adjacente, int* res);
+#pragma endregion
+
+#pragma region Remover
+Adjacente* RemoverAdjacente(Adjacente* adjacentes, int id, int* res);
+int RemoverTodosAdjacentes(Adjacente* adjacentes);
+#pragma endregion
+
+#pragma region Verificar
+int VerificarVerticesAdjacentesVisitados(Vertice* vertices, Adjacente* adjacentes);
+int VerificarAdjacencia(Adjacente* adjacentes, int id);
+#pragma endregion
+
+#pragma region Operacoes
+int CompararPesosAdjacente(Adjacente* adjacente, int valor);
+#pragma endregion
+
+#pragma region Outro
+ int EncontrarIdMenorAdjacente(Adjacente* adjacentes);
+int EncontrarIdMenorAdjacenteNaoVisitado(Vertice* vertices, Adjacente* adjacentes, int* res);
+#pragma endregion
+
+#pragma endregion
+
+#pragma region Grafo
+
+Grafo* CriarGrafo();
+
+#pragma region Adicionar
+Grafo* AdicionarVerticeGrafo(Grafo* grafo, Vertice* vertice, int* res);
+Grafo* AdicionarAdjacenciaGrafo(Grafo* grafo, int origem, Adjacente* adjacente, int verificar, int* res);
+#pragma endregion
+
+#pragma region Remover
+Grafo* RemoverTodosAdjacentesGrafo(Grafo* grafo, int id, int* res);
+Grafo* RemoverAdjacenteTodosVerticesGrafo(Grafo* grafo, int id, int* res);
+Grafo* RemoverAdjacenteGrafo(Grafo* grafo, int vertice, int adjacente, int* res);
+Grafo* RemoverVerticeGrafo(Grafo* grafo, int id, int* res);
+#pragma endregion
+
+#pragma region Algoritmos
+int DepthFirstTraversal(Grafo* grafo, int inicioId);
+int BreadthFirstTraversal(Grafo* grafo, int inicioId);
+int DeterminarMaiorCaminhoGrafo(Grafo* grafo, int inicioId, int destinoId, int* res);
+#pragma endregion
+
+#pragma region Outro
+int MostrarGrafo(Grafo* grafo);
+#pragma endregion
+#pragma endregion
+
+#pragma region Ficheiros
+ListaInteiros* GrafoParaListaInteiros(Grafo* grafo, ListaInteiros* lista, int* res);
+Grafo* CarregarGrafo(ListaInteiros* lista, int* vertices, int* res);
+ListaInteiros* LerGrafoTxt(char ficheiro[], int* numVertices, int* res);
+ListaInteiros* LerGrafoBin(ListaInteiros* lista, char ficheiro[], int* vertices, int* res);
+int GuardarGrafoBin(ListaInteiros* lista, char ficheiro[]);
+Grafo* ArrancarPrograma(char ficheiroTxt[], char ficheiroBin[], int* res);
+#pragma endregion
+
+#pragma region ListaInteiros
+ListaInteiros* CriarListaInteiros();
+ListaInteiros* CriarListasInteiros(int tam, int* res);
+
+#pragma region Adicionar
+ListaInteiros* AdiconarDadosListaInteiros(ListaInteiros* lista, int num, int* res);
+ListaInteiros* AdicionarNumeroListaInteirosInicio(ListaInteiros* lista, ListaInteiros* numero, int* res);
+ListaInteiros* AdicionarNumeroListaInteirosFim(ListaInteiros* lista, ListaInteiros* numero, int* res);
+ListaInteiros* AdicionarVerticeIdListaInteiros(ListaInteiros* lista, Vertice* vertices, int* res);
+ListaInteiros* CriarAdicionarNumeroListaInteirosInicio(ListaInteiros* lista, int num, int* res);
+ListaInteiros* CriarAdicionarNumeroListaInteirosFim(ListaInteiros* lista, int num, int* top, int* res);
+ListaInteiros* CriarAdicionarNumeroListaInteirosFim2(ListaInteiros* lista, int num, int* res);
+#pragma endregion
+
+#pragma region Operacoes
+int CompararDistanciaVerticeDistancia(VerticeDistancia* verticeDistancia, int valor);
+int ComparaDistanciaListaVerticeDistancia(VerticeDistancia* verticeDistancia, int id, int valor);
+#pragma endregion
+
+#pragma region Remover
+ListaInteiros* RemoverNumeroListaInteiros(ListaInteiros* lista, int num, int* res);
+ListaInteiros* RemoverNumeroListaInteirosComTop(ListaInteiros* lista, int num, int* top, int* res);
+#pragma endregion
+
+#pragma region Verificar
+int VerificarListaInteirosVazia(ListaInteiros* lista);
+int VerificarNumeroListaInteiros(ListaInteiros* lista, int num);
+#pragma endregion
+
+#pragma region Outro
+int EncontrarUltimoNumeroListaInteiros(ListaInteiros* lista);
+ListaInteiros* EncontrarNumeroListaInteiros(ListaInteiros* lista, int num, int* res);
+#pragma endregion
+
+#pragma endregion
+
+#pragma region VerticeDistancias
+VerticeDistancia* CriarVerticeDistancia();
+VerticeDistancia* CriarVerticesDistancia(int tamanho, int* res);
+
+#pragma region Adicionar
+VerticeDistancia* AdicionarDadosVerticeDistancia(VerticeDistancia* verticeDistancia, int id, int distancia, int* res);
+VerticeDistancia* AdicionarIdVerticeDistancia(VerticeDistancia* verticeDistancia, int id, int* res);
+VerticeDistancia* AdicionarDistanciaVerticeDistancia(VerticeDistancia* verticeDistancia, int distancia, int* res);
+VerticeDistancia* AdicionarDistanciaListaVerticeDistancia(VerticeDistancia* verticeDistancia, int id, int distancia, int* res);
+VerticeDistancia* AdicionarTodosIdVerticesDistancia(VerticeDistancia* verticeDistancias, int id, int* res);
+VerticeDistancia* AdicionarTodosVerticesIdVerticesDistancia(VerticeDistancia* verticeDistancias, Vertice* vertices, int* res);
+VerticeDistancia* AdicionarTodosDistanciaVerticesDistancia(VerticeDistancia* verticeDistancias, int distancia, int* res);
+VerticeDistancia* AdicionarVerticeDistancia(VerticeDistancia* verticeDistancias, VerticeDistancia* verticeDist, int* res);
+
+VerticeDistancia* AtribuirVerticeDistanciaAnterior(VerticeDistancia* verticeDistancia, VerticeDistancia* anterior, int* res);
+VerticeDistancia* AtribuirListaVerticeDistanciaAnterior(VerticeDistancia* verticeDistancias, VerticeDistancia* anterior, int id, int* res);
+#pragma endregion
+
+#pragma region Remover
+VerticeDistancia* RemoverVerticeDistacia(VerticeDistancia* verticeDistancias, int id, int* res);
+#pragma endregion
+
+#pragma region Operacoes
+VerticeDistancia* SomarDistanciasVerticeDistancia(VerticeDistancia* verticeDistancia, int valor, int* res);
+VerticeDistancia* SomarDistanciaListaVerticeDistancia(VerticeDistancia* verticeDistancias, int id, int valor, int* res);
+int SomarDistanciasVerticeDistancia2(VerticeDistancia* verticeDistancia, int valor, int* res);
+int SomarDistanciaListaVerticeDistancia2(VerticeDistancia* verticeDistancias, int id, int valor, int* res);
+int SomarTodasDistanciasListaVerticeDistancia(Vertice* verticeDistancias);
+#pragma endregion
+
+#pragma region Verificar
+int VerificarVerticeDistancia(VerticeDistancia* verticeDistancias, int id);
+#pragma endregion
+
+#pragma region Outro
+VerticeDistancia* EncontrarVerticeDistancia(VerticeDistancia* verticeDistancias, int id, int* res);
+int EncontrarIdAnteriorVerticeDistancia(VerticeDistancia* verticeDistancias, int id);
+int ProcessarCaminho(VerticeDistancia* verticeDistancas, int destino);
+#pragma endregion
+
 #pragma endregion
